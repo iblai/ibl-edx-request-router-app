@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.conf.urls import url
 
-from dl_request_router import views
+from ibl_request_router import views
 
 
 MANAGER_PROXY_ENABLED = getattr(settings, "MANAGER_PROXY_ENABLED", True)
