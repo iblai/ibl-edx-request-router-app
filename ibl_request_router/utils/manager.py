@@ -1,3 +1,4 @@
+import json
 import logging
 import requests
 
@@ -9,12 +10,13 @@ from django.http import Http404
 log = logging.getLogger(__name__)
 
 
-MANAGER_BASE_API_URL = getattr(settings, "MANAGER_BASE_URL", "") + "/api"
+MANAGER_BASE_URL = getattr(settings, "MANAGER_BASE_URL", "")
+MANAGER_BASE_API_URL = MANAGER_BASE_URL + "/api"
 MANAGER_PROXY_TIMEOUT = getattr(settings, "MANAGER_PROXY_TIMEOUT", 10)
 
 
 def manager_request(method, endpoint_path, params=None, data=None):
-    if not MANAGER_BASE_API_URL:
+    if not MANAGER_BASE_URL:
         raise Http404
     
     url = "{}/{}".format(MANAGER_BASE_API_URL, endpoint_path.lstrip('/'))
@@ -46,15 +48,15 @@ def convert_manager_proxy_params(params):
 
 
 def manager_proxy_request(request, endpoint_path=''):
-    if not MANAGER_BASE_API_URL:
+    if not MANAGER_BASE_URL:
         raise Http404
     
     url = "{}/{}".format(MANAGER_BASE_API_URL, endpoint_path.lstrip('/'))
     
     # Assume nothing in headers and cookies need to be passed
     kwargs = {
-        "params": convert_manager_proxy_params(request.GET),
-        "json": convert_manager_proxy_params(request.POST),
+        "params": convert_manager_proxy_params(request.query_params),
+        "json": convert_manager_proxy_params(request.data),
         "timeout": MANAGER_PROXY_TIMEOUT
     }
     
