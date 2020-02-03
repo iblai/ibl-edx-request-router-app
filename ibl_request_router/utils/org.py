@@ -12,7 +12,10 @@ DEFAULT_ORG = getattr(settings, 'MANAGER_DEFAULT_ORG', None)
 MULTITENANCY_ENABLED = getattr(settings, 'MANAGER_MULTITENANCY_ENABLED', False)
 
 
-def get_effective_org(org=None):
+def get_org(org=None):
+    """
+    Gets the effective org based on whether multitenancy is enabled
+    """
     if org is not None and MULTITENANCY_ENABLED:
         return org
     else:
