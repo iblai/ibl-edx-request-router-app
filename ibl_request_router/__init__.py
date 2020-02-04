@@ -1,2 +1,2 @@
 # INIT
-default_app_config = 'dl_request_router.apps.RequestRouterConfig'
+default_app_config = 'ibl_request_router.apps.RequestRouterConfig'
