@@ -17,7 +17,7 @@ except ImportError:
 
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 
-from .utils.manager import manager_proxy_request
+from .api.manager import manager_proxy_request
 
 
 log = logging.getLogger(__name__)
