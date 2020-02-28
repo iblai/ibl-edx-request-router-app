@@ -10,15 +10,15 @@ Request router for edX
 ### Installation
 #### Install
 ```
-sudo -u edxapp /edx/bin/pip.edxapp install -v git+https://gitlab.com/deeplms/ibl-request-router
+sudo -Hu edxapp /edx/bin/pip.edxapp install -v git+https://gitlab.com/deeplms/ibl-request-router
 ```
 #### Reinstall
 ```
-sudo -u edxapp /edx/bin/pip.edxapp install --upgrade --no-deps --force-reinstall -v git+https://gitlab.com/deeplms/ibl-request-router
+sudo -Hu edxapp /edx/bin/pip.edxapp install --upgrade --no-deps --force-reinstall -v git+https://gitlab.com/deeplms/ibl-request-router
 ```
 #### Uninstall
 ```
-sudo -u edxapp /edx/bin/pip.edxapp uninstall ibl_request_router
+sudo -Hu edxapp /edx/bin/pip.edxapp uninstall ibl_request_router
 ```
 
 ### Django

@@ -66,8 +66,9 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
     # Try request
     response = None
     for req in range(max_tries):
-        try:        
-            log.info("Manager request: %s %s", method, url)
+        try:
+            # TODO: Make this DEBUG
+            log.info("Manager request: %s %s %s", method, url, params)
             response = requests.request(
                 method, url, **request_kwargs
             )
