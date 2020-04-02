@@ -36,26 +36,25 @@ def manager_proxy_view(request, endpoint_path=None):
     
     # Check staff 
     if not (request.user.is_authenticated and
-        (request.user.is_staff or request.user.is_superuser)):
-        log.info("Not authorized")
-        
+            (request.user.is_staff or request.user.is_superuser)):
+        log.warning("Not authorized for %s: %s", endpoint_path, unicode(request.user))
         raise Http404
     
     try:
         response = manager_proxy_request(request, endpoint_path)
         
         try:
-            log.info("Response: %s", response.text)
+            log.info("Response %s: %s %s", endpoint_path, response.status_code, response.text)
             return Response(
                 response.json(), status=response.status_code
             )
         except ValueError:
-            log.error("Non-JSON response", exc_info=True)
-            pass
+            if response.ok:
+                # Only log when the response is expected to be valid
+                log.error("Non-JSON response %s: %s %s", endpoint_path, response.status_code, response.text, exc_info=True)
         
-        log.info("Response code: %s", response.status_code)
         return Response({}, status=response.status_code)
         #return HttpResponse(response.text, status=response.status_code)
     except Exception as exc:
-        log.error("Bad proxy request", exc_info=True)
+        log.error("Bad proxy request: %s", endpoint_path, exc_info=True)
         raise Http404

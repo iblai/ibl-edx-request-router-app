@@ -36,7 +36,7 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
                         verify=MANAGER_VERIFY_SSL,
                         timeout=MANAGER_REQUEST_TIMEOUT):
     """
-    Submit request to manager with proper authentication
+    Submit API request to manager with proper authentication
 
     Return:
     Manager request response
@@ -73,7 +73,7 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
                 method, url, **request_kwargs
             )
         except Exception as exc:
-            log.error("Manager response exception", exc_info=True)
+            log.error("Manager response exception: %s %s %s", method, url, params, exc_info=True)
             continue
     
     return response
@@ -88,10 +88,13 @@ def convert_manager_proxy_params(params):
     # Convert username to user_id
     if 'username' in params:
         try:
-            user = User.objects.get(username=params.get('username'))
+            username = params.get('username')
+            user = User.objects.get(username=username)
             new_params['user_id'] = user.id
+        except User.DoesNotExist as dne_exc:
+            log.error("Error converting username to user_id (User does not exist): %s", username)
         except Exception as exc:
-            log.error("Error converting username to user_id", exc_info=True)
+            log.error("Error converting username to user_id: %s", username, exc_info=True)
     
     return new_params
 
