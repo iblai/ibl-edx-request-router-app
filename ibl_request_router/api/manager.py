@@ -117,10 +117,18 @@ def manager_proxy_request(request, endpoint_path=''):
     # Assume nothing in original headers and cookies need to be passed
     request_kwargs = {
         "params": convert_manager_proxy_params(request.query_params),
-        "json": convert_manager_proxy_params(request.data),
         "timeout": MANAGER_PROXY_TIMEOUT,
         "headers": headers
     }
+    
+    # If files are present
+    if request.FILES:
+        # Use multipart
+        request_kwargs["files"] = request.FILES
+        request_kwargs["data"] = convert_manager_proxy_params(request.data)
+    else:
+        # JSON payload
+        request_kwargs["json"] = convert_manager_proxy_params(request.data)
     
     log.info("Manager proxy request: %s %s", request.method, url)
     return requests.request(
