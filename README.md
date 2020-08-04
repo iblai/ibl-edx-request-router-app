@@ -14,7 +14,7 @@ sudo -Hu edxapp /edx/bin/pip.edxapp install -v git+https://gitlab.com/deeplms/ib
 ```
 #### Reinstall
 ```
-sudo -Hu edxapp /edx/bin/pip.edxapp install --upgrade --no-deps --force-reinstall -v git+https://gitlab.com/deeplms/ibl-request-router
+sudo -Hu edxapp /edx/bin/pip.edxapp install --upgrade --no-deps --force-reinstall git+https://gitlab.com/deeplms/ibl-request-router
 ```
 #### Uninstall
 ```
@@ -50,24 +50,27 @@ urlpatterns += (
 * `MANAGER_BASE_URL`: The manager URL
 
 ##### Optional
-* `MANAGER_PROXY_TIMEOUT`: How long it takes for requests to timeout (in seconds)
-* `MANAGER_PROXY_ENABLED`: Whether the manager proxy is enabled (Default: `True`)
-* `MANAGER_AUTH_ENABLED`: The whether manager auth is enabled (Default: `True`)
 * `MANAGER_AUTH_APP_ID`: The auth manager app ID - corresponds to `ibl-api-auth` (Default: `manager`)
-
+* `MANAGER_AUTH_ENABLED`: The whether manager auth is enabled (Default: `True`)
+* `MANAGER_MAX_TRIES`: Request max tries (Default: 1)
+* `MANAGER_PROXY_ENABLED`: Whether the manager proxy is enabled (Default: `True`)
+* `MANAGER_PROXY_TIMEOUT`: How long it takes for proxy requests to timeout (in seconds)
+* `MANAGER_REQUEST_TIMEOUT`: How long it takes for requests to timeout (in seconds)
+* `MANAGER_VERIFY_SSL`: Verify SSL on requests (Default: `True`)
 
 ##### Additional
 `MANAGER_DEFAULT_ORG`
 `MANAGER_MULTITENANCY_ENABLED`
-
 
 ##### Sample Config
 ```
 MANAGER_BASE_URL = "https://manager.ibleducation.com"
 MANAGER_AUTH_ENABLED = True
 MANAGER_AUTH_APP_ID = "manager"
-MANAGER_PROXY_TIMEOUT = 10
-
 MANAGER_DEFAULT_ORG = "default"
+MANAGER_MAX_TRIES = 1
 MANAGER_MULTITENANCY_ENABLED = False
+MANAGER_PROXY_TIMEOUT = 10
+MANAGER_REQUEST_TIMEOUT = 20
+MANAGER_VERIFY_SSL = True
 ```
