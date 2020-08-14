@@ -10,7 +10,7 @@ Request router for edX
 ### Installation
 #### Install
 ```
-sudo -Hu edxapp /edx/bin/pip.edxapp install -v git+https://gitlab.com/deeplms/ibl-request-router
+sudo -Hu edxapp /edx/bin/pip.edxapp install git+https://gitlab.com/deeplms/ibl-request-router
 ```
 #### Reinstall
 ```
@@ -27,9 +27,11 @@ sudo -Hu edxapp /edx/bin/pip.edxapp uninstall ibl_request_router
 `cms/envs/common.py`
 
 Add to `INSTALLED_APPS`
-```
+```python
 INSTALLED_APPS = (
-    'ibl_request_router',
+    # ...
+    'ibl_request_router'
+    # ...
 )
 ```
 
@@ -37,7 +39,7 @@ INSTALLED_APPS = (
 Add to the end of `urlpatterns` (this should be last, or towards the end)
 
 `lms/urls.py`
-```
+```python
 urlpatterns += (
     url(r'', include('ibl_request_router.urls.lms_urls')),
 )
@@ -59,8 +61,8 @@ urlpatterns += (
 * `MANAGER_VERIFY_SSL`: Verify SSL on requests (Default: `True`)
 
 ##### Additional
-`MANAGER_DEFAULT_ORG`
-`MANAGER_MULTITENANCY_ENABLED`
+* `MANAGER_DEFAULT_ORG`
+* `MANAGER_MULTITENANCY_ENABLED`
 
 ##### Sample Config
 ```
