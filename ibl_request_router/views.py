@@ -17,7 +17,7 @@ except ImportError:
 
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 
-from .api.manager import manager_proxy_request
+from ibl_request_router.api.manager import manager_proxy_request
 
 
 log = logging.getLogger(__name__)
@@ -51,10 +51,13 @@ def manager_proxy_view(request, endpoint_path=None):
         except ValueError:
             if response.ok:
                 # Only log when the response is expected to be valid
-                log.error("Non-JSON response %s: %s %s", endpoint_path, response.status_code, response.text, exc_info=True)
+                log.error(
+                    "Non-JSON response %s: %s %s",
+                    endpoint_path, response.status_code, response.text, exc_info=True
+                )
         
         return Response({}, status=response.status_code)
         #return HttpResponse(response.text, status=response.status_code)
-    except Exception as exc:
-        log.error("Bad proxy request: %s", endpoint_path, exc_info=True)
+    except Exception:
+        log.exception("Bad proxy request: %s", endpoint_path)
         raise Http404

@@ -48,7 +48,7 @@ urlpatterns += (
 
 #### Settings
 
-##### Required
+##### Required (for manager proxy)
 * `MANAGER_BASE_URL`: The manager URL
 
 ##### Optional
@@ -69,10 +69,13 @@ urlpatterns += (
 MANAGER_BASE_URL = "https://manager.ibleducation.com"
 MANAGER_AUTH_ENABLED = True
 MANAGER_AUTH_APP_ID = "manager"
-MANAGER_DEFAULT_ORG = "default"
+MANAGER_DEFAULT_ORG = "main"
 MANAGER_MAX_TRIES = 1
 MANAGER_MULTITENANCY_ENABLED = False
 MANAGER_PROXY_TIMEOUT = 10
-MANAGER_REQUEST_TIMEOUT = 20
+MANAGER_REQUEST_TIMEOUT = 10
 MANAGER_VERIFY_SSL = True
 ```
+
+##### Note
+* If `MANAGER_MAX_TRIES` is set to 0, all manager requests will be blocked.

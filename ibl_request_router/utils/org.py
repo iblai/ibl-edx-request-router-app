@@ -5,11 +5,10 @@ from django.contrib.sites.shortcuts import get_current_site
 
 from opaque_keys.edx.keys import CourseKey
 
+from ibl_request_router.config import DEFAULT_ORG, MULTITENANCY_ENABLED
+
 
 log = logging.getLogger(__name__)
-
-DEFAULT_ORG = getattr(settings, 'MANAGER_DEFAULT_ORG', None)
-MULTITENANCY_ENABLED = getattr(settings, 'MANAGER_MULTITENANCY_ENABLED', False)
 
 
 def get_org(org=None):
@@ -26,6 +25,7 @@ def get_org_from_request(request):
         site = get_current_site(request)
         
         # FUTURE: May have to change when microsites are removed
+        # MAYBE: Reference augmented site configuration for the organization value
         microsite = getattr(site, 'microsite', None)
         if microsite:
             # There should only be one org mapped to a microsite in multitenancy

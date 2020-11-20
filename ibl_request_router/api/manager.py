@@ -11,24 +11,19 @@ try:
 except ImportError:
     pass
 
+from ibl_request_router.config import (
+    MANAGER_BASE_URL,
+    MANAGER_BASE_API_URL,
+    MANAGER_MAX_TRIES,
+    MANAGER_VERIFY_SSL,
+    MANAGER_REQUEST_TIMEOUT,
+    MANAGER_PROXY_TIMEOUT,
+    MANAGER_AUTH_ENABLED,
+    MANAGER_AUTH_APP_ID
+)
+
 
 log = logging.getLogger(__name__)
-
-
-MANAGER_BASE_URL = getattr(settings, "MANAGER_BASE_URL", "")
-MANAGER_BASE_API_URL = MANAGER_BASE_URL + "/api"
-
-# Request retries
-MANAGER_MAX_TRIES = getattr(settings, 'MANAGER_MAX_TRIES', 1)
-# Request certificate verification
-MANAGER_VERIFY_SSL = getattr(settings, 'MANAGER_VERIFY_SSL', True)
-# Request default timeout
-MANAGER_REQUEST_TIMEOUT = getattr(settings, 'MANAGER_REQUEST_TIMEOUT', 20)
-# Request proxy timeout
-MANAGER_PROXY_TIMEOUT = getattr(settings, "MANAGER_PROXY_TIMEOUT", MANAGER_REQUEST_TIMEOUT)
-
-MANAGER_AUTH_ENABLED = getattr(settings, 'MANAGER_AUTH_ENABLED', True)
-MANAGER_AUTH_APP_ID = getattr(settings, 'MANAGER_AUTH_APP_ID', 'manager')
 
 
 def manager_api_request(method, endpoint_path, params=None, data=None,
@@ -45,6 +40,7 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
         raise Http404
     
     if not max_tries:
+        log.info("Manager requests are disabled")
         return None
     
     url = "{}/{}".format(MANAGER_BASE_API_URL, endpoint_path.lstrip('/'))
@@ -68,12 +64,12 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
     for req in range(max_tries):
         try:
             # TODO: Make this DEBUG
-            log.info("Manager request: %s %s %s", method, url, params)
+            log.info("Manager request #%d: %s %s %s", req, method, url, params)
             response = requests.request(
                 method, url, **request_kwargs
             )
-        except Exception as exc:
-            log.error("Manager response exception: %s %s %s", method, url, params, exc_info=True)
+        except Exception:
+            log.exception("Manager response exception: %s %s %s", method, url, params)
             continue
     
     return response
@@ -91,10 +87,10 @@ def convert_manager_proxy_params(params):
             username = params.get('username')
             user = User.objects.get(username=username)
             new_params['user_id'] = user.id
-        except User.DoesNotExist as dne_exc:
+        except User.DoesNotExist:
             log.error("Error converting username to user_id (User does not exist): %s", username)
-        except Exception as exc:
-            log.error("Error converting username to user_id: %s", username, exc_info=True)
+        except Exception:
+            log.exception("Error converting username to user_id: %s", username)
     
     return new_params
 
