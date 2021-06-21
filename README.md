@@ -10,15 +10,15 @@ Request router for edX
 ### Installation
 #### Install
 ```
-sudo -Hu edxapp /edx/bin/pip.edxapp install git+https://gitlab.com/deeplms/ibl-request-router
+sudo -Hu edxapp /edx/app/edxapp/venvs/edxapp/bin/pip install git+https://gitlab.com/deeplms/ibl-request-router
 ```
 #### Reinstall
 ```
-sudo -Hu edxapp /edx/bin/pip.edxapp install --upgrade --no-deps --force-reinstall git+https://gitlab.com/deeplms/ibl-request-router
+sudo -Hu edxapp /edx/app/edxapp/venvs/edxapp/bin/pip install --upgrade --no-deps --force-reinstall git+https://gitlab.com/deeplms/ibl-request-router
 ```
 #### Uninstall
 ```
-sudo -Hu edxapp /edx/bin/pip.edxapp uninstall ibl_request_router
+sudo -Hu edxapp /edx/app/edxapp/venvs/edxapp/bin/pip uninstall ibl_request_router
 ```
 
 ### Django
@@ -40,6 +40,7 @@ Add to the end of `urlpatterns` (this should be last, or towards the end)
 
 `lms/urls.py`
 ```python
+# NOTE: This should be towards the end of the urlpatterns
 urlpatterns += (
     url(r'', include('ibl_request_router.urls.lms_urls')),
 )
@@ -48,10 +49,10 @@ urlpatterns += (
 
 #### Settings
 
-##### Required (for manager proxy)
+##### Required Manager Settings
 * `MANAGER_BASE_URL`: The manager URL
 
-##### Optional
+##### Additional Manager Core Settings
 * `MANAGER_AUTH_APP_ID`: The auth manager app ID - corresponds to `ibl-api-auth` (Default: `manager`)
 * `MANAGER_AUTH_ENABLED`: The whether manager auth is enabled (Default: `True`)
 * `MANAGER_MAX_TRIES`: Request max tries (Default: 1)
@@ -59,10 +60,12 @@ urlpatterns += (
 * `MANAGER_PROXY_TIMEOUT`: How long it takes for proxy requests to timeout (in seconds)
 * `MANAGER_REQUEST_TIMEOUT`: How long it takes for requests to timeout (in seconds)
 * `MANAGER_VERIFY_SSL`: Verify SSL on requests (Default: `True`)
+* `MANAGER_DEFAULT_ORG`: Should generally be set to "main"
+* `MANAGER_MULTITENANCY_ENABLED`: Whether the edX is multitenant
 
-##### Additional
-* `MANAGER_DEFAULT_ORG`
-* `MANAGER_MULTITENANCY_ENABLED`
+##### Additional Manager Routing Settings
+* `IBL_REQUEST_ROUTER_MANAGER_API_UNAUTH_ALLOWLIST`: List of proxy endpoint paths that can be accessed without authentication
+* `IBL_REQUEST_ROUTER_MANAGER_API_AUTH_ALLOWLIST`: List of proxy endpoint paths that can be accessed with regular credentials
 
 ##### Sample Config
 ```
@@ -79,3 +82,4 @@ MANAGER_VERIFY_SSL = True
 
 ##### Note
 * If `MANAGER_MAX_TRIES` is set to 0, all manager requests will be blocked.
+* By default, all manager proxy endpoints require admin access.

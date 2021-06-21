@@ -1,5 +1,6 @@
 import logging
 import requests
+import six
 
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, JsonResponse
@@ -21,6 +22,7 @@ except ImportError:
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 
 from ibl_request_router.api.manager import manager_proxy_request
+from ibl_request_router.utils.access import check_request_permissions
 
 
 log = logging.getLogger(__name__)
@@ -38,9 +40,8 @@ def manager_proxy_view(request, endpoint_path=None):
         raise Http404
     
     # Check staff
-    if not (request.user.is_authenticated and
-            (request.user.is_staff or request.user.is_superuser)):
-        log.warning("Not authorized for %s: %s", endpoint_path, unicode(request.user))
+    if not check_request_permissions(request, endpoint_path):
+        log.warning("Not authorized for %s: %s", endpoint_path, six.text_type(request.user))
         raise Http404
     
     try:
