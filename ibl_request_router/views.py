@@ -7,7 +7,10 @@ from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import api_view, authentication_classes
-from rest_framework_oauth.authentication import OAuth2Authentication
+try:
+    from openedx.core.lib.api.authentication import BearerAuthentication as OAuth2Authentication
+except ImportError:
+    from rest_framework_oauth.authentication import OAuth2Authentication
 from rest_framework.response import Response
 
 try:
@@ -34,7 +37,7 @@ def manager_proxy_view(request, endpoint_path=None):
         log.info("No endpoint path")
         raise Http404
     
-    # Check staff 
+    # Check staff
     if not (request.user.is_authenticated and
             (request.user.is_staff or request.user.is_superuser)):
         log.warning("Not authorized for %s: %s", endpoint_path, unicode(request.user))
