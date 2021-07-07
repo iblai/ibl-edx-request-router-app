@@ -1,4 +1,4 @@
-name: ibl-catalog-metadata
+name: ibl-request-router-plugin
 version: 0.1.0
 patches:
   openedx-common-settings: |
