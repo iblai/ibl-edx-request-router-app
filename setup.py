@@ -16,10 +16,10 @@ setup(
     author_email='ibl@ibl.ibl',
     entry_points={
         'lms.djangoapp': [
-            'ibl-request = ibl_request_router.apps:RequestRouterConfig',
+            'ibl_request_router = ibl_request_router.apps:RequestRouterConfig',
         ],
         'cms.djangoapp': [
-            'ibl-request = ibl_request_router.apps:RequestRouterConfig',
+            'ibl_request_router = ibl_request_router.apps:RequestRouterConfig',
         ]
     },
     classifiers=[
