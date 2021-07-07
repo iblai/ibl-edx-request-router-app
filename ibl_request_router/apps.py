@@ -1,12 +1,11 @@
 from django.apps import AppConfig
-from openedx.core.djangoapps.plugins.constants import SettingsType
 
 try:
-    from edx_django_utils.plugins.constants import PluginURLs, PluginSettings
+    from edx_django_utils.plugins.constants import PluginURLs
     from openedx.core.djangoapps.plugins.constants import ProjectType
 except ImportError:
     from openedx.core.djangoapps.plugins.constants import  (
-        ProjectType, PluginURLs, PluginSettings
+        ProjectType, PluginURLs
     )
 
 
@@ -22,19 +21,6 @@ class RequestRouterConfig(AppConfig):
                 PluginURLs.REGEX: r'',
                 PluginURLs.RELATIVE_PATH: 'urls'
             },
-        },
-        PluginSettings.CONFIG: {
-            ProjectType.LMS: {
-                SettingsType.COMMON: {
-                    PluginSettings.RELATIVE_PATH: 'settings'
-                }
-            },
-            ProjectType.CMS: {
-                SettingsType.COMMON: {
-                    PluginSettings.RELATIVE_PATH: 'settings'
-                }
-            }
         }
-
     }
 
