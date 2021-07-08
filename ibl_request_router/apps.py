@@ -16,7 +16,7 @@ class RequestRouterConfig(AppConfig):
     plugin_app = {
         'url_config': {
             'lms.djangoapp': {
-                'namespace': 'completion',
+                'namespace': 'ibl_request_router',
                 'regex': r'',
                 'relative_path': 'ibl_request_router.urls.lms_urls',
             },
