@@ -14,6 +14,13 @@ class RequestRouterConfig(AppConfig):
     verbose_name = "IBL Request Router"
 
     plugin_app = {
+        'url_config': {
+            'lms.djangoapp': {
+                'namespace': 'completion',
+                'regex': r'',
+                'relative_path': 'ibl_request_router.urls.lms_urls',
+            },
+        },
         'settings_config': {
             'lms.djangoapp': {
                 'common': {
