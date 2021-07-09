@@ -18,7 +18,7 @@ class RequestRouterConfig(AppConfig):
             'lms.djangoapp': {
                 'namespace': 'ibl_request_router',
                 'regex': r'',
-                'relative_path': 'ibl_request_router.urls.lms_urls',
+                'relative_path': 'urls.lms_urls',
             },
         },
         'settings_config': {
