@@ -11,7 +11,7 @@ urlpatterns = []
 if MANAGER_PROXY_ENABLED:
     urlpatterns += [
         url(
-            r'^api/ibl/(?P<endpoint_path>[\w+-/@.~]+)$',
+            r'^api/ibl/(?P<endpoint_path>[\w+-/@.~+:]+)$',
             views.manager_proxy_view,
             name="manager_proxy_view"
         )

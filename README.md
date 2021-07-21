@@ -67,6 +67,11 @@ urlpatterns += (
 * `IBL_REQUEST_ROUTER_MANAGER_API_UNAUTH_ALLOWLIST`: List of proxy endpoint paths that can be accessed without authentication
 * `IBL_REQUEST_ROUTER_MANAGER_API_AUTH_ALLOWLIST`: List of proxy endpoint paths that can be accessed with regular credentials
 
+###### Notes
+* The allowlists can only be used with endpoints with static paths
+* Remove leading and trailing slashes when adding a path
+    * Do not include the `/api/` / `/api/ibl/` portions of the path
+
 ##### Sample Config
 ```
 MANAGER_BASE_URL = "https://manager.ibleducation.com"

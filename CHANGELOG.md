@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.2
+Allow additional characters in endpoint path regex
+
 ## 0.2.1
 Add additional proxy request permission options
 * Add settings to allow access to certain manager endpoints as unauthenticated and non-elevated users
