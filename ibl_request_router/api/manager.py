@@ -63,7 +63,7 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
     response = None
     for req in range(max_tries):
         try:
-            # TODO: Make this DEBUG
+            # TODO: Make logs optional
             log.info("Manager request #%d: %s %s %s", req, method, url, params)
             response = requests.request(
                 method, url, **request_kwargs
@@ -122,7 +122,7 @@ def manager_proxy_request(request, endpoint_path=''):
         # Use multipart
         request_kwargs["files"] = request.FILES
         request_kwargs["data"] = convert_manager_proxy_params(request.data)
-    else:
+    elif request.data:
         # JSON payload
         request_kwargs["json"] = convert_manager_proxy_params(request.data)
     

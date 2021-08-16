@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.3
+GCP compatibility update
+* Check for request body existence to avoid replicating empty body
+* https://cloud.google.com/load-balancing/docs/https#illegal_request_and_response_handling
+
 ## 0.2.2
 Allow additional characters in endpoint path regex
 
