@@ -41,7 +41,7 @@ def manager_proxy_view(request, endpoint_path=None):
     # Check staff
     if not (request.user.is_authenticated and
             (request.user.is_staff or request.user.is_superuser)):
-        log.warning("Not authorized for %s: %s", endpoint_path, unicode(request.user))
+        log.warning("Not authorized for %s: %s", endpoint_path, str(request.user))
         raise Http404
 
     try:
