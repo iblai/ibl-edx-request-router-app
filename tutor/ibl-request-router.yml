@@ -1,8 +1,8 @@
-name: ibl-request-router-plugin
+name: ibl-request-router
 version: 0.1.0
 patches:
   openedx-common-settings: |
-    MANAGER_BASE_URL = "https://studio.iblopen.ibl.dev"
+    MANAGER_BASE_URL =  "https://manager.devlms.socialgoodplatform.com"
     MANAGER_AUTH_ENABLED = True
     MANAGER_AUTH_APP_ID = "manager"
     MANAGER_DEFAULT_ORG = "main"
