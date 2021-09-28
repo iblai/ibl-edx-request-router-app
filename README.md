@@ -7,7 +7,7 @@ Request router for edX
 * [IBL API Auth](https://gitlab.com/iblstudios/ibl-api-auth)
 
 
-### Installation
+### Tutor
 #### Install
 ```
 cd $(tutor config printroot)"/env/build/openedx/requirements
