@@ -6,7 +6,6 @@ Request router for edX
 ### Dependencies
 * [IBL API Auth](https://gitlab.com/iblstudios/ibl-api-auth)
 
-
 ### Tutor
 #### Install
 ```
