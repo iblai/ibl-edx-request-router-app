@@ -114,7 +114,8 @@ def manager_proxy_request(request, endpoint_path=''):
     request_kwargs = {
         "params": convert_manager_proxy_params(request.query_params),
         "timeout": MANAGER_PROXY_TIMEOUT,
-        "headers": headers
+        "headers": headers,
+        "verify": MANAGER_VERIFY_SSL
     }
     
     # If files are present

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.4
+* Add verify toggle to manager proxy requests
+
 ## 0.2.3
 GCP compatibility update
 * Check for request body existence to avoid replicating empty body
