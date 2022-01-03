@@ -1,6 +1,7 @@
 pipeline {
     environment {
      boolean CLONE_REPO_ON_REMOTE = true
+     DEPLOYMENT_SERVER = "gipsbrian@134.209.69.5"
     }
     
     agent any
@@ -18,7 +19,7 @@ pipeline {
                     catchError(message: 'Repo already exists on the remote server') {
                         // try and clone the repo
                         sh '''
-                            ssh -t -t gipsbrian@134.209.69.5 -o StrictHostKeyChecking=no "cd \\$(tutor config printroot)/env/build/openedx/requirements/ibl-request-router; 
+                            ssh -t -t ${DEPLOYMENT_SERVER} -o StrictHostKeyChecking=no "cd \\$(tutor config printroot)/env/build/openedx/requirements/ibl-request-router; 
                             git pull origin koa-tutor-plugin; 
                             ls -l"
                         '''
@@ -28,7 +29,7 @@ pipeline {
                         script {
                             if(!CLONE_REPO_ON_REMOTE){
                                 sh '''
-                                    ssh -t -t gipsbrian@134.209.69.5 -o StrictHostKeyChecking=no "cd \\$(tutor config printroot)/env/build/openedx/requirements;
+                                    ssh -t -t ${DEPLOYMENT_SERVER} -o StrictHostKeyChecking=no "cd \\$(tutor config printroot)/env/build/openedx/requirements;
                                     git clone -b koa-tutor-plugin git@gitlab.com:deeplms/ibl-request-router.git; 
                                     ls -l"
                                  '''
