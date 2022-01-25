@@ -14,6 +14,14 @@ setup(
     url='https://gitlab.com/deeplms/ibl-request-router',
     author='IBL Studios',
     author_email='ibl@ibl.ibl',
+    entry_points={
+        'lms.djangoapp': [
+            'ibl_request_router = ibl_request_router.apps:RequestRouterConfig',
+        ],
+        'cms.djangoapp': [
+            'ibl_request_router = ibl_request_router.apps:RequestRouterConfig',
+        ]
+    },
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
