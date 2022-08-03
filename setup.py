@@ -9,6 +9,8 @@ setup(
     name='ibl-request-router',
     version='0.2.4',
     packages=find_packages(),
+    package_dir={'': 'src'},
+    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
     include_package_data=True,
     description='Request router',
     url='https://gitlab.com/deeplms/ibl-request-router',
