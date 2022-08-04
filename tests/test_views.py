@@ -4,10 +4,10 @@ from urllib.parse import urljoin
 import pytest
 from django.shortcuts import reverse
 
-from ibl_request_router.config import MANAGER_BASE_API_URL
 
 from .utils import auth_info
 
+MANAGER_BASE_API_URL = '/hola'
 HTTP_METHODS = ["get", "post", "put", "delete"]
 URL_PREFIX = MANAGER_BASE_API_URL + "/ibl/"
 
@@ -33,6 +33,10 @@ class TestManagerProxyView:
     @mock.patch(
         "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
         ("knock_knock",),
+    )
+    @mock.patch(
+        "ibl_request_router.api.manager.MANAGER_BASE_URL",
+        MANAGER_BASE_API_URL,
     )
     def test_unprivileged_user_can_access_unauth_endpoints(
         self, http_method, client, requests_mock
