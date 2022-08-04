@@ -34,7 +34,7 @@ class TestManagerProxyView:
         ("knock_knock",),
     )
     @mock.patch(
-        "ibl_request_router.api.manager.MANAGER_BASE_URL",
+        "ibl_request_router.api.manager.MANAGER_BASE_API_URL",
         MANAGER_BASE_API_URL,
     )
     @mock.patch(
