@@ -1,4 +1,5 @@
 from unittest import mock
+from requests_mock import ANY as requests_mock_ANY
 
 import pytest
 from django.shortcuts import reverse
@@ -50,7 +51,7 @@ class TestManagerProxyView:
     ):
         _, token_header, _ = auth_info()
         requests_mock.request(
-            http_method, requests_mock.ANY, json={"detail": "success"}
+            http_method, requests_mock_ANY, json={"detail": "success"}
         )
         resp = client.generic(
             http_method,
