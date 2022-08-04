@@ -20,7 +20,7 @@ class TestManagerProxyView:
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
     def test_no_endpoint_returns_404(self, http_method, client):
         _, token_header, _ = auth_info()
-        placeholder = '__PLACEHOLDER__'
+        placeholder = '--PLACEHOLDER--'
 
         resp = client.generic(
             http_method,
