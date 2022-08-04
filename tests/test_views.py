@@ -23,7 +23,7 @@ class TestManagerProxyView:
 
         resp = client.generic(
             http_method,
-            "/api/ibl/",
+            reverse(self.url_name, args=('',)),
             HTTP_AUTHORIZATION=token_header,
         )
 
