@@ -7,7 +7,7 @@ from .utils import auth_info
 @pytest.mark.django_db
 class TestManagerProxyView:
     endpoint = "/knock_knock/"
-    url = reverse("ibl_request_router:manager_proxy_view")
+    url = reverse("ibl_request_router:manager_proxy_view", args=(None, ))
 
     @pytest.mark.parametrize(
         "http_method",
