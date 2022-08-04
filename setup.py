@@ -11,6 +11,7 @@ setup(
     name='ibl-request-router',
     version='0.2.5',
     packages=find_packages('src'),
+    install_requires=['requests-mock'],
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
     include_package_data=True,
