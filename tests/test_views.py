@@ -14,7 +14,7 @@ HTTP_METHODS = ["get", "post", "put", "delete"]
 
 @pytest.mark.django_db
 class TestManagerProxyView:
-    endpoint = "knock_knock/"
+    endpoint = "knock_knock"
     url_name = "ibl_request_router:manager_proxy_view"
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
