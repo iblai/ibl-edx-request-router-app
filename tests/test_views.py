@@ -1,3 +1,4 @@
+from uuid import uuid4
 from unittest import mock
 from requests_mock import ANY as requests_mock_ANY
 
@@ -18,13 +19,12 @@ class TestManagerProxyView:
     url_name = "ibl_request_router:manager_proxy_view"
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
-    def test_no_endpoint_returns_404(self, http_method, client):
+    def test_random_endpoint_returns_404(self, http_method, client):
         _, token_header, _ = auth_info()
-        placeholder = '--PLACEHOLDER--'
 
         resp = client.generic(
             http_method,
-            reverse(self.url_name, args=(placeholder,)).rstrip(placeholder),
+            reverse(self.url_name, args=(uuid4().hex,)),
             HTTP_AUTHORIZATION=token_header,
         )
 
