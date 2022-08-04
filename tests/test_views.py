@@ -34,7 +34,6 @@ class TestManagerProxyView:
 
         assert resp.status_code == 404
 
-    @mock.patch("ibl_request_router.views.manager_proxy_request")
     @pytest.mark.parametrize(
         "manager_proxy_request_raises_exception",
         (
@@ -73,13 +72,14 @@ class TestManagerProxyView:
         "ibl_request_router.api.manager.MANAGER_AUTH_ENABLED",
         False,
     )
+    @mock.patch("ibl_request_router.views.manager_proxy_request")
     def test_unprivileged_user_can_access_unauth_endpoints(
         self,
+        mocked_proxy_request_func,
         http_method,
         is_response_json,
         status_code,
         manager_proxy_request_raises_exception,
-        mocked_proxy_request_func,
         client,
         requests_mock,
     ):
