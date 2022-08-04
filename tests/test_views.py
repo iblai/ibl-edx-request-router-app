@@ -38,6 +38,10 @@ class TestManagerProxyView:
         "ibl_request_router.api.manager.MANAGER_BASE_URL",
         MANAGER_BASE_API_URL,
     )
+    @mock.patch(
+        "ibl_request_router.api.manager.MANAGER_AUTH_ENABLED",
+        False,
+    )
     def test_unprivileged_user_can_access_unauth_endpoints(
         self, http_method, client, requests_mock
     ):
