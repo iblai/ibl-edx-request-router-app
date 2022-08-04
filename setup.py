@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from glob import glob
+from os.path import basename, splitext
 import os
 from setuptools import find_packages, setup
 
