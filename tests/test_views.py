@@ -7,6 +7,7 @@ from django.shortcuts import reverse
 
 from .utils import auth_info
 
+MANAGER_BASE_URL = 'https://sleipnir.asgard.local'
 MANAGER_BASE_API_URL = 'https://sleipnir.asgard.local/api'
 HTTP_METHODS = ["get", "post", "put", "delete"]
 
@@ -34,8 +35,8 @@ class TestManagerProxyView:
         ("knock_knock",),
     )
     @mock.patch(
-        "ibl_request_router.api.manager.MANAGER_BASE_API_URL",
-        MANAGER_BASE_API_URL,
+        "ibl_request_router.api.manager.MANAGER_BASE_URL",
+        MANAGER_BASE_URL,
     )
     @mock.patch(
         "ibl_request_router.api.manager.MANAGER_AUTH_ENABLED",
