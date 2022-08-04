@@ -27,7 +27,7 @@ class TestManagerProxyView:
 
     @pytest.mark.parametrize("http_method", http_methods)
     @mock.patch(
-        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST", "/knock_knock/"
+        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST", ("/knock_knock/", )
     )
     def test_unprivileged_user_can_access_unauth_endpoints(
         self, http_method, client, requests_mock
