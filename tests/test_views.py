@@ -7,9 +7,8 @@ from django.shortcuts import reverse
 
 from .utils import auth_info
 
-MANAGER_BASE_API_URL = '/hola'
+MANAGER_BASE_API_URL = 'https://sleipnir.asgard.local/api'
 HTTP_METHODS = ["get", "post", "put", "delete"]
-URL_PREFIX = MANAGER_BASE_API_URL + "/ibl/"
 
 
 @pytest.mark.django_db
@@ -47,7 +46,7 @@ class TestManagerProxyView:
     ):
         _, token_header, _ = auth_info()
         requests_mock.request(
-            http_method, urljoin(URL_PREFIX, self.endpoint), json={"detail": "success"}
+            http_method, urljoin(MANAGER_BASE_API_URL, self.endpoint), json={"detail": "success"}
         )
         resp = client.generic(
             http_method,
