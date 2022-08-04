@@ -9,12 +9,12 @@ from .utils import auth_info
 
 MANAGER_BASE_URL = "https://sleipnir.asgard.local"
 MANAGER_BASE_API_URL = MANAGER_BASE_URL + "/api"
-HTTP_METHODS = (
+HTTP_METHODS = [
     "get",
     "post",
     "put",
     "delete",
-)
+]
 
 
 @pytest.mark.django_db
