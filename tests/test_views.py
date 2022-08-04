@@ -34,6 +34,14 @@ class TestManagerProxyView:
 
         assert resp.status_code == 404
 
+    @mock.patch("ibl_request_router.views.manager_proxy_request")
+    @pytest.mark.parametrize(
+        "manager_proxy_request_raises_exception",
+        (
+            True,
+            False,
+        ),
+    )
     @pytest.mark.parametrize(
         "status_code",
         (
@@ -66,8 +74,20 @@ class TestManagerProxyView:
         False,
     )
     def test_unprivileged_user_can_access_unauth_endpoints(
-        self, http_method, is_response_json, status_code, client, requests_mock
+        self,
+        http_method,
+        is_response_json,
+        status_code,
+        manager_proxy_request_raises_exception,
+        mocked_proxy_request_func,
+        client,
+        requests_mock,
     ):
+        if manager_proxy_request_raises_exception:
+            mocked_proxy_request_func.raiseError.side_effect = mock.Mock(
+                side_effect=Exception("an exception that causes 404!")
+            )
+
         if is_response_json:
             mocked_resp = {
                 "json": {"detail": "success" if status_code == 200 else "not 200"}
@@ -86,11 +106,14 @@ class TestManagerProxyView:
             HTTP_AUTHORIZATION=token_header,
         )
 
-        assert resp.status_code == status_code
-        if is_response_json:
-            if status_code == 200:
-                assert resp.json()["detail"] == "success"
-            else:
-                assert resp.json()["detail"] == "not 200"
+        if manager_proxy_request_raises_exception:
+            assert resp.status_code == 404
         else:
-            assert resp.json() == dict()
+            assert resp.status_code == status_code
+            if is_response_json:
+                if status_code == 200:
+                    assert resp.json()["detail"] == "success"
+                else:
+                    assert resp.json()["detail"] == "not 200"
+            else:
+                assert resp.json() == dict()
