@@ -8,7 +8,7 @@ from django.shortcuts import reverse
 from .utils import auth_info
 
 MANAGER_BASE_URL = "https://sleipnir.asgard.local"
-MANAGER_BASE_API_URL = MANAGER_BASE_URL + "/api"
+MANAGER_BASE_API_URL = MANAGER_BASE_URL + "/api/"
 HTTP_METHODS = [
     "get",
     "post",
@@ -86,7 +86,7 @@ class TestManagerProxyView:
 
         _, token_header, _ = auth_info()
         requests_mock.request(
-            http_method.upper(),
+            http_method,
             urljoin(MANAGER_BASE_API_URL, self.endpoint),
             status_code=status_code,
             **mocked_resp
