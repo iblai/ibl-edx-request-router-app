@@ -109,6 +109,10 @@ class TestManagerProxyView:
         "ibl_request_router.views.manager_proxy_request",
         side_effect=RandomException(),
     )
+    @mock.patch(
+        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
+        ("knock_knock",),
+    )
     def test_manager_proxy_request_raises_random_exception_returns_404_from_views(
         self, _mock_manager_proxy_request, http_method, client
     ):
