@@ -21,7 +21,7 @@ HTTP_METHODS = [
 class TestManagerProxyView:
     endpoint = "knock_knock"
     url_name = "ibl_request_router:manager_proxy_view"
-    full_url = (f"{MANAGER_BASE_API_URL}/{endpoint}",)
+    full_url = f"{MANAGER_BASE_API_URL}/{endpoint}"
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
     def test_random_endpoint_returns_404(self, http_method, client):
