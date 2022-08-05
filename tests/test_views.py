@@ -185,4 +185,72 @@ class TestManagerProxyView:
             )
 
             assert resp.json()["detail"] == "success"
+        if scenario == "user_non_existent":
+            fake_username = uuid4().hex
+            _, token_header, _ = auth_info()
+            requests_mock.request(
+                http_method,
+                f"{self.full_url}?username={fake_username}",
+                json={"detail": "success"},
+            )
 
+            def additional_matcher(request):
+                j = json.loads(request.text)
+                return "user_id" not in j.keys()
+
+            requests_mock.request(
+                http_method,
+                f"{self.full_url}",
+                json={"detail": "success"},
+                additional_matcher=additional_matcher,
+            )
+
+            resp = client.generic(
+                http_method,
+                reverse(
+                    self.url_name,
+                    args=(self.endpoint,),
+                )
+                + f"?username={fake_username}",
+                data=json.dumps({"username": fake_username}),
+                content_type="application/json",
+                HTTP_AUTHORIZATION=token_header,
+            )
+
+            assert resp.json()["detail"] == "success"
+        if scenario == "random_exception":
+            user, token_header, _ = auth_info()
+            requests_mock.request(
+                http_method,
+                f"{self.full_url}?username={user.username}",
+                json={"detail": "success"},
+            )
+
+            def additional_matcher(request):
+                j = json.loads(request.text)
+                return "user_id" not in j.keys()
+
+            requests_mock.request(
+                http_method,
+                f"{self.full_url}",
+                json={"detail": "success"},
+                additional_matcher=additional_matcher,
+            )
+
+            with mock.patch(
+                "ibl_request_router.api.manager.convert_manager_proxy_params",
+                side_effect=RandomException(),
+            ):
+                resp = client.generic(
+                    http_method,
+                    reverse(
+                        self.url_name,
+                        args=(self.endpoint,),
+                    )
+                    + f"?username={user.username}",
+                    data=json.dumps({"username": user.username}),
+                    content_type="application/json",
+                    HTTP_AUTHORIZATION=token_header,
+                )
+
+            assert resp.json()["detail"] == "success"
