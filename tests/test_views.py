@@ -7,8 +7,8 @@ from django.shortcuts import reverse
 
 from .utils import auth_info
 
-MANAGER_BASE_URL = "https://sleipnir.asgard.local"
-MANAGER_BASE_API_URL = MANAGER_BASE_URL + "/api/"
+MANAGER_BASE_URL = "http://sleipnir.asgard.local"
+MANAGER_BASE_API_URL = MANAGER_BASE_URL + "/api"
 HTTP_METHODS = [
     "get",
     "post",
