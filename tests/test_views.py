@@ -238,7 +238,7 @@ class TestManagerProxyView:
             )
 
             with mock.patch(
-                "ibl_request_router.api.manager.convert_manager_proxy_params",
+                "ibl_request_router.api.manager.User.objects.get",
                 side_effect=RandomException(),
             ):
                 resp = client.generic(
