@@ -106,25 +106,24 @@ class TestManagerProxyView:
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
     @mock.patch(
-        "ibl_request_router.views.manager_proxy_request",
-        side_effect=RandomException(),
-    )
-    @mock.patch(
         "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
         ("knock_knock",),
     )
     def test_manager_proxy_request_raises_random_exception_returns_404_from_views(
-        self, _mock_manager_proxy_request, http_method, client
+        self, http_method, client
     ):
         _, token_header, _ = auth_info()
-
-        resp = client.generic(
-            http_method,
-            reverse(
-                self.url_name,
-                args=(self.endpoint,),
-            ),
-            HTTP_AUTHORIZATION=token_header,
-        )
+        with mock.patch(
+            "ibl_request_router.views.manager_proxy_request",
+            side_effect=RandomException(),
+        ):
+            resp = client.generic(
+                http_method,
+                reverse(
+                    self.url_name,
+                    args=(self.endpoint,),
+                ),
+                HTTP_AUTHORIZATION=token_header,
+            )
 
         assert resp.status_code == 404
