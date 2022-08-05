@@ -186,18 +186,3 @@ class TestManagerProxyView:
 
             assert resp.json()["detail"] == "success"
 
-    @pytest.mark.parametrize("http_method", HTTP_METHODS)
-    @mock.patch(
-        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
-        ("knock_knock",),
-    )
-    def test_params_conversion_when_user_does_not_exist(self, http_method):
-        pass
-
-    @pytest.mark.parametrize("http_method", HTTP_METHODS)
-    @mock.patch(
-        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
-        ("knock_knock",),
-    )
-    def test_params_conversion_when_random_exception_is_raised(self, http_method):
-        pass
