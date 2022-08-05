@@ -160,7 +160,7 @@ class TestManagerProxyView:
             )
 
             def additional_matcher(request):
-                j = json.loads(request)
+                j = json.loads(request.text)
                 is_username_good = j["username"] == user.username
                 is_user_id_good = j["user_id"] == user.id
                 return is_username_good and is_user_id_good
