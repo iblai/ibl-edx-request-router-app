@@ -36,6 +36,14 @@ class TestManagerProxyView:
         assert resp.status_code == 404
 
     @pytest.mark.parametrize(
+        "allowlist_mode",
+        (
+            'admin',
+            'unauth',
+            'auth',
+        ),
+    )
+    @pytest.mark.parametrize(
         "status_code",
         (
             200,
@@ -50,10 +58,7 @@ class TestManagerProxyView:
         ),
     )
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
-    @mock.patch(
-        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
-        ("knock_knock",),
-    )
+
     @mock.patch(
         "ibl_request_router.api.manager.MANAGER_BASE_URL",
         MANAGER_BASE_URL,
@@ -66,11 +71,12 @@ class TestManagerProxyView:
         "ibl_request_router.api.manager.MANAGER_AUTH_ENABLED",
         False,
     )
-    def test_unprivileged_user_can_access_unauth_endpoints(
+    def test_user_can_access_endpoints(
         self,
         http_method,
         is_response_json,
         status_code,
+        allowlist_mode,
         client,
         requests_mock,
     ):
@@ -81,16 +87,48 @@ class TestManagerProxyView:
         else:
             mocked_resp = {"text": "success"}
 
-        _, token_header, _ = auth_info()
         requests_mock.request(
             http_method, self.full_url, status_code=status_code, **mocked_resp
         )
+        if allowlist_mode == 'admin':
+            _, token_header, _ = auth_info(is_staff=True, is_superuser=True)
+            with mock.patch(
+                "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
+                tuple(),
+            ):
+                with mock.patch(
+                        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
+                        tuple(),
+                ):
+                    resp = client.generic(
+                        http_method,
+                        reverse(self.url_name, args=(self.endpoint,)),
+                        HTTP_AUTHORIZATION=token_header,
+                    )
+        if allowlist_mode == 'unauth':
+            _, token_header, _ = auth_info(is_staff=True, is_superuser=True)
+            with mock.patch(
+                "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
+                ("knock_knock",),
+            ):
+                resp = client.generic(
+                    http_method,
+                    reverse(self.url_name, args=(self.endpoint,)),
+                    HTTP_AUTHORIZATION=token_header,
+                )
+        if allowlist_mode == 'auth':
+            _, token_header, _ = auth_info(is_staff=True, is_superuser=True)
+            with mock.patch(
+                "ibl_request_router.utils.access.MANAGER_API_AUTH_ALLOWLIST",
+                ("knock_knock",),
+            ):
+                resp = client.generic(
+                    http_method,
+                    reverse(self.url_name, args=(self.endpoint,)),
+                    HTTP_AUTHORIZATION=token_header,
+                )
 
-        resp = client.generic(
-            http_method,
-            reverse(self.url_name, args=(self.endpoint,)),
-            HTTP_AUTHORIZATION=token_header,
-        )
+
 
         assert resp.status_code == status_code
         if is_response_json:
