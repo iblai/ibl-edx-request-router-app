@@ -1,11 +1,11 @@
+import json
 from unittest import mock
-from urllib.parse import urljoin
 from uuid import uuid4
 
 import pytest
 from django.shortcuts import reverse
 
-from .utils import auth_info
+from .utils import RandomException, auth_info
 
 MANAGER_BASE_URL = "http://sleipnir.asgard.local"
 MANAGER_BASE_API_URL = MANAGER_BASE_URL + "/api"
@@ -17,14 +17,11 @@ HTTP_METHODS = [
 ]
 
 
-class RandomException(Exception):
-    pass
-
-
 @pytest.mark.django_db
 class TestManagerProxyView:
     endpoint = "knock_knock"
     url_name = "ibl_request_router:manager_proxy_view"
+    full_url = (f"{MANAGER_BASE_API_URL}/{endpoint}",)
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
     def test_random_endpoint_returns_404(self, http_method, client):
@@ -86,10 +83,7 @@ class TestManagerProxyView:
 
         _, token_header, _ = auth_info()
         requests_mock.request(
-            http_method,
-            f'{MANAGER_BASE_API_URL}/{self.endpoint}',
-            status_code=status_code,
-            **mocked_resp
+            http_method, self.full_url, status_code=status_code, **mocked_resp
         )
 
         resp = client.generic(
@@ -131,14 +125,79 @@ class TestManagerProxyView:
 
         assert resp.status_code == 404
 
+    @pytest.mark.parametrize(
+        "scenario",
+        (
+            "ok",
+            "user_non_existent",
+            "random_exception",
+        ),
+    )
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
-    def test_params_conversion(self, http_method):
-        user, token_header, _ = auth_info()
+    @mock.patch(
+        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
+        ("knock_knock",),
+    )
+    @mock.patch(
+        "ibl_request_router.api.manager.MANAGER_BASE_URL",
+        MANAGER_BASE_URL,
+    )
+    @mock.patch(
+        "ibl_request_router.api.manager.MANAGER_BASE_API_URL",
+        MANAGER_BASE_API_URL,
+    )
+    @mock.patch(
+        "ibl_request_router.api.manager.MANAGER_AUTH_ENABLED",
+        False,
+    )
+    def test_params_conversion(self, http_method, scenario, client, request_mock):
+        if scenario == "ok":
+            user, token_header, _ = auth_info()
+            request_mock.request(
+                http_method,
+                f"{self.full_url}?username={user.username}&user_id={user.id}",
+                json={"detail": "success"},
+            )
+
+            def additional_matcher(request):
+                j = json.loads(request)
+                is_username_good = j["username"] == user.username
+                is_user_id_good = j["user_id"] == user.id
+                return is_username_good and is_user_id_good
+
+            request_mock.request(
+                http_method,
+                f"{self.full_url}",
+                json={"detail": "success"},
+                additional_matcher=additional_matcher,
+            )
+
+            resp = client.generic(
+                http_method,
+                reverse(
+                    self.url_name,
+                    args=(self.endpoint,),
+                )
+                + f"?username={user.username}",
+                data=json.dumps({"username": user.username}),
+                content_type="application/json",
+                HTTP_AUTHORIZATION=token_header,
+            )
+
+            assert resp.json()["detail"] == "success"
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
+    @mock.patch(
+        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
+        ("knock_knock",),
+    )
     def test_params_conversion_when_user_does_not_exist(self, http_method):
         pass
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
+    @mock.patch(
+        "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
+        ("knock_knock",),
+    )
     def test_params_conversion_when_random_exception_is_raised(self, http_method):
         pass

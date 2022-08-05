@@ -17,3 +17,7 @@ def auth_info(**kwargs):
         f"Bearer {access_token}",
         getattr(UserFactory, "_DEFAULT_PASSWORD"),
     )
+
+
+class RandomException(Exception):
+    pass
