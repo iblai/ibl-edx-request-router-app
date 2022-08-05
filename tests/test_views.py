@@ -87,7 +87,7 @@ class TestManagerProxyView:
         _, token_header, _ = auth_info()
         requests_mock.request(
             http_method,
-            urljoin(MANAGER_BASE_API_URL, self.endpoint),
+            f'{MANAGER_BASE_API_URL}/{self.endpoint}',
             status_code=status_code,
             **mocked_resp
         )
