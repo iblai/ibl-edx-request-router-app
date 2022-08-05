@@ -106,10 +106,10 @@ class TestManagerProxyView:
                         HTTP_AUTHORIZATION=token_header,
                     )
         if allowlist_mode == 'unauth':
-            _, token_header, _ = auth_info(is_staff=True, is_superuser=True)
+            _, token_header, _ = auth_info()
             with mock.patch(
                 "ibl_request_router.utils.access.MANAGER_API_UNAUTH_ALLOWLIST",
-                ("knock_knock",),
+                (self.endpoint,),
             ):
                 resp = client.generic(
                     http_method,
@@ -117,10 +117,10 @@ class TestManagerProxyView:
                     HTTP_AUTHORIZATION=token_header,
                 )
         if allowlist_mode == 'auth':
-            _, token_header, _ = auth_info(is_staff=True, is_superuser=True)
+            _, token_header, _ = auth_info()
             with mock.patch(
                 "ibl_request_router.utils.access.MANAGER_API_AUTH_ALLOWLIST",
-                ("knock_knock",),
+                (self.endpoint,),
             ):
                 resp = client.generic(
                     http_method,
