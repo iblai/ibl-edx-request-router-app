@@ -132,13 +132,13 @@ class TestManagerProxyView:
         assert resp.status_code == 404
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
-    def test_params_conversion(self, http_method, scenario):
+    def test_params_conversion(self, http_method):
         user, token_header, _ = auth_info()
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
-    def test_params_conversion_when_user_does_not_exist(self):
+    def test_params_conversion_when_user_does_not_exist(self, http_method):
         pass
 
     @pytest.mark.parametrize("http_method", HTTP_METHODS)
-    def test_params_conversion_when_random_exception_is_raised(self):
+    def test_params_conversion_when_random_exception_is_raised(self, http_method):
         pass
