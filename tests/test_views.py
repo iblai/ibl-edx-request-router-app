@@ -1,9 +1,9 @@
 from unittest import mock
+from urllib.parse import urljoin
 from uuid import uuid4
 
 import pytest
 from django.shortcuts import reverse
-from requests_mock import ANY as requests_mock_ANY
 
 from .utils import auth_info
 
@@ -86,7 +86,10 @@ class TestManagerProxyView:
 
         _, token_header, _ = auth_info()
         requests_mock.request(
-            http_method, requests_mock_ANY, status_code=status_code, **mocked_resp
+            http_method,
+            urljoin(MANAGER_BASE_API_URL, self.endpoint),
+            status_code=status_code,
+            **mocked_resp
         )
 
         resp = client.generic(
@@ -127,3 +130,15 @@ class TestManagerProxyView:
             )
 
         assert resp.status_code == 404
+
+    @pytest.mark.parametrize("http_method", HTTP_METHODS)
+    def test_params_conversion(self, http_method, scenario):
+        user, token_header, _ = auth_info()
+
+    @pytest.mark.parametrize("http_method", HTTP_METHODS)
+    def test_params_conversion_when_user_does_not_exist(self):
+        pass
+
+    @pytest.mark.parametrize("http_method", HTTP_METHODS)
+    def test_params_conversion_when_random_exception_is_raised(self):
+        pass
