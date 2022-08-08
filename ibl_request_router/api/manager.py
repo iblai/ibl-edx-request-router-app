@@ -68,6 +68,8 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
             response = requests.request(
                 method, url, **request_kwargs
             )
+            if response.ok:
+                break
         except Exception:
             log.exception("Manager response exception: %s %s %s", method, url, params)
             continue
