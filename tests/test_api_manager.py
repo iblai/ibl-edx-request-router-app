@@ -42,7 +42,6 @@ class TestAPIManager:
         "ibl_request_router.api.manager.MANAGER_BASE_API_URL", MANAGER_BASE_API_URL
     )
     @mock.patch("ibl_request_router.api.manager.MANAGER_MAX_TRIES", 1)
-    @mock.patch("ibl_request_router.api.manager.MANAGER_AUTH_ENABLED", True)
     def test_good_request_returns_response(self, _gaat, http_method, requests_mock):
         def request_data_check(request):
             j = json.loads(request.text)
@@ -51,7 +50,7 @@ class TestAPIManager:
         requests_mock.request(
             http_method,
             self.full_url,
-            # request_headers={"Authorization": f"Bearer {OAUTH_TOKEN}"},
+            request_headers={"Authorization": f"Bearer {OAUTH_TOKEN}"},
             json={"detail": "success"},
             additional_matcher=request_data_check,
         )
