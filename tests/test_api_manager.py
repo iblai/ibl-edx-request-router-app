@@ -57,7 +57,7 @@ class TestAPIManager:
         )
 
         resp = manager_api_request(
-            http_method, self.endpoint, data=json.dumps({"detail": "hi"})
+            http_method, self.endpoint, data={"detail": "hi"}
         )
 
         assert resp.status_code == 200
