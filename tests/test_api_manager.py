@@ -33,7 +33,7 @@ class TestAPIManager:
 
         assert resp is None
 
-    @pytest.mark.parametrize("http_method", ("GET", "POST", "PUT", "DELETE", "PATCH"))
+    @pytest.mark.parametrize("http_method", ("get", "post", "put", "delete", "patch"))
     @mock.patch(
         "ibl_request_router.api.manager.get_app_access_token", return_vaule=OAUTH_TOKEN
     )
