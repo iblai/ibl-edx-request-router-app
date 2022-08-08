@@ -48,6 +48,7 @@ class TestUtilsOrg:
     @mock.patch(DEFAULT_ORG_PKG_PATH, DEFAULT_ORG)
     def test_get_org_from_request(self, multitenancy_enabled):
         request = RequestFactory()
+        request.get_host = lambda: '127.0.0.1'
         with mock.patch(MULTITENANCY_ENABLED_PKG_PATH, multitenancy_enabled):
             org = get_org_from_request(request)
         if multitenancy_enabled:
