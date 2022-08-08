@@ -51,7 +51,7 @@ class TestAPIManager:
         requests_mock.request(
             http_method,
             self.full_url,
-            request_headers={"Authorization": f"Bearer {OAUTH_TOKEN}"},
+            # request_headers={"Authorization": f"Bearer {OAUTH_TOKEN}"},
             json={"detail": "success"},
             additional_matcher=request_data_check,
         )
