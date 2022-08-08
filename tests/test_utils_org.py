@@ -5,11 +5,14 @@ from django.test import RequestFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import ToyCourseFactory
 
-from ibl_request_router.utils.org import (get_org, get_org_from_course,
-                                          get_org_from_course_key_string,
-                                          get_org_from_request)
+from ibl_request_router.utils.org import (
+    get_org,
+    get_org_from_course,
+    get_org_from_course_key_string,
+    get_org_from_request,
+)
 
-from .utils import course_key
+from .utils import FakeMicroSite, course_key, fake_org
 
 DEFAULT_ORG_PKG_PATH = "ibl_request_router.utils.org.DEFAULT_ORG"
 DEFAULT_ORG = "UCL Psychopath Academy"
@@ -58,9 +61,19 @@ class TestUtilsOrg:
         with mock.patch(MULTITENANCY_ENABLED_PKG_PATH, multitenancy_enabled):
             org = get_org_from_request(request)
         if multitenancy_enabled:
-            assert org is None  # no microsite
+            assert org is None
         else:
             assert org == DEFAULT_ORG
+
+    @mock.patch(MULTITENANCY_ENABLED_PKG_PATH, True)
+    @mock.patch(DEFAULT_ORG_PKG_PATH, DEFAULT_ORG)
+    @mock.patch(
+        "ibl_request_router.utils.org.get_current_site", return_value=FakeMicroSite()
+    )
+    def test_get_org_from_request_with_fake_microsite(self):
+        request = RequestFactory()
+        org = get_org_from_request(request)
+        assert org == fake_org
 
 
 @pytest.mark.django_db
