@@ -2,6 +2,7 @@ from unittest import mock
 
 import pytest
 from django.test import RequestFactory
+from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import ToyCourseFactory
 
 from ibl_request_router.utils.org import (
@@ -22,7 +23,7 @@ MY_ORG = "UCLA Computing Department"
 
 
 @pytest.mark.django_db
-class TestUtilsOrg:
+class TestUtilsOrg(ModuleStoreTestCase):
     @pytest.mark.parametrize(
         "my_org",
         (
