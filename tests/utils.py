@@ -30,3 +30,20 @@ def course_key(course):
     run = getattr(course, "run", getattr(course.__class__, "run", ToyCourseFactory.run))
     ck = s.make_course_key(course.org, course.number, run)
     return ck
+
+
+fake_org = "fake-org-from-microsite!"
+
+
+class FakeMicroSiteOrg:
+    def first(self):
+        return fake_org
+
+
+class FakeMicroSite:
+    def get_organizations(self):
+        return FakeMicroSiteOrg()
+
+
+class FakeSite:
+    microsite = FakeMicroSite()
