@@ -3,6 +3,8 @@ from datetime import timedelta
 from common.djangoapps.student.tests.factories import UserFactory
 from django.utils import timezone
 from openedx.core.djangoapps.oauth_dispatch.tests import factories
+from xmodule.modulestore.django import modulestore
+from xmodule.modulestore.tests.factories import ToyCourseFactory
 
 
 def auth_info(**kwargs):
@@ -21,3 +23,10 @@ def auth_info(**kwargs):
 
 class RandomException(Exception):
     pass
+
+
+def course_key(course):
+    s = modulestore()
+    run = getattr(course, "run", getattr(course.__class__, "run", ToyCourseFactory.run))
+    ck = s.make_course_key(course.org, course.number, run)
+    return ck
