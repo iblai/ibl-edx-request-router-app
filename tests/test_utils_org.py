@@ -5,12 +5,9 @@ from django.test import RequestFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import ToyCourseFactory
 
-from ibl_request_router.utils.org import (
-    get_org,
-    get_org_from_course,
-    get_org_from_course_key_string,
-    get_org_from_request,
-)
+from ibl_request_router.utils.org import (get_org, get_org_from_course,
+                                          get_org_from_course_key_string,
+                                          get_org_from_request)
 
 from .utils import course_key
 
@@ -23,7 +20,7 @@ MY_ORG = "UCLA Computing Department"
 
 
 @pytest.mark.django_db
-class TestUtilsOrg(ModuleStoreTestCase):
+class TestUtilsOrg:
     @pytest.mark.parametrize(
         "my_org",
         (
@@ -65,23 +62,22 @@ class TestUtilsOrg(ModuleStoreTestCase):
         else:
             assert org == DEFAULT_ORG
 
-    @pytest.mark.parametrize(
-        "multitenancy_enabled",
-        (
-            True,
-            False,
-        ),
-    )
+
+@pytest.mark.django_db
+class TestGetOrgFromCourses(ModuleStoreTestCase):
     @mock.patch(DEFAULT_ORG_PKG_PATH, DEFAULT_ORG)
-    def test_get_org_from_course_or_key_or_string(self, multitenancy_enabled):
+    def test_get_org_from_course_or_key_or_string(self):
         toy_course = ToyCourseFactory()
         course_key_string = str(course_key(toy_course))
-        with mock.patch(MULTITENANCY_ENABLED_PKG_PATH, multitenancy_enabled):
+
+        with mock.patch(MULTITENANCY_ENABLED_PKG_PATH, True):
             org_from_course = get_org_from_course(toy_course)
             org_from_string = get_org_from_course_key_string(course_key_string)
-        if multitenancy_enabled:
             assert org_from_string == toy_course.org
             assert org_from_course == toy_course.org
-        else:
+
+        with mock.patch(MULTITENANCY_ENABLED_PKG_PATH, False):
+            org_from_course = get_org_from_course(toy_course)
+            org_from_string = get_org_from_course_key_string(course_key_string)
             assert org_from_string == DEFAULT_ORG
             assert org_from_course == DEFAULT_ORG
