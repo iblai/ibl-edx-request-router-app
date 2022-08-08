@@ -70,7 +70,7 @@ class TestUtilsOrg:
     @mock.patch(
         "ibl_request_router.utils.org.get_current_site", return_value=FakeMicroSite()
     )
-    def test_get_org_from_request_with_fake_microsite(self):
+    def test_get_org_from_request_with_fake_microsite(self, _gcs):
         request = RequestFactory()
         org = get_org_from_request(request)
         assert org == fake_org
