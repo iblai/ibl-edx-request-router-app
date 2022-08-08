@@ -12,7 +12,7 @@ from ibl_request_router.utils.org import (
     get_org_from_request,
 )
 
-from .utils import FakeMicroSite, course_key, fake_org
+from .utils import FakeSite, course_key, fake_org
 
 DEFAULT_ORG_PKG_PATH = "ibl_request_router.utils.org.DEFAULT_ORG"
 DEFAULT_ORG = "UCL Psychopath Academy"
@@ -68,7 +68,7 @@ class TestUtilsOrg:
     @mock.patch(MULTITENANCY_ENABLED_PKG_PATH, True)
     @mock.patch(DEFAULT_ORG_PKG_PATH, DEFAULT_ORG)
     @mock.patch(
-        "ibl_request_router.utils.org.get_current_site", return_value=FakeMicroSite()
+        "ibl_request_router.utils.org.get_current_site", return_value=FakeSite()
     )
     def test_get_org_from_request_with_fake_microsite(self, _gcs):
         request = RequestFactory()

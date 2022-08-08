@@ -33,11 +33,17 @@ def course_key(course):
 
 
 fake_org = "fake-org-from-microsite!"
+
+
 class FakeMicroSiteOrg:
     def first(self):
         return fake_org
+
+
 class FakeMicroSite:
     def get_organizations(self):
         return FakeMicroSiteOrg()
+
+
 class FakeSite:
     microsite = FakeMicroSite()
