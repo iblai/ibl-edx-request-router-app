@@ -35,13 +35,14 @@ class TestAPIManager:
 
     @pytest.mark.parametrize("http_method", ("get", "post", "put", "delete", "patch"))
     @mock.patch(
-        "ibl_request_router.api.manager.get_app_access_token", return_vaule=OAUTH_TOKEN
+        "ibl_request_router.api.manager.get_app_access_token", return_value=OAUTH_TOKEN
     )
     @mock.patch(MANAGER_BASE_URL_PKG_PATH, MANAGER_BASE_URL)
     @mock.patch(
         "ibl_request_router.api.manager.MANAGER_BASE_API_URL", MANAGER_BASE_API_URL
     )
     @mock.patch("ibl_request_router.api.manager.MANAGER_MAX_TRIES", 1)
+    @mock.patch("ibl_request_router.api.manager.AUTH_ENABLED", True)
     def test_good_request_returns_response(self, _gaat, http_method, requests_mock):
         def request_data_check(request):
             j = json.loads(request.text)
