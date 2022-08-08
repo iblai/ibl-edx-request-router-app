@@ -1,7 +1,7 @@
 from unittest import mock
 
 import pytest
-from ibl_reqeust_router.utils.org import get_org
+from ibl_request_router.utils.org import get_org
 
 DEFAULT_ORG_PKG_PATH = "ibl_request_router.utils.org.DEFAULT_ORG"
 DEFAULT_ORG = "UCL Psychopath Academy"
