@@ -8,7 +8,7 @@ from ibl_request_router.api.manager import manager_api_request
 MANAGER_BASE_URL_PKG_PATH = ("ibl_request_router.api.manager.MANAGER_BASE_URL",)
 
 
-@pytest.Mark.django_db
+@pytest.mark.django_db
 class TestAPIManager:
     endpoint = "knock_knock"
 
