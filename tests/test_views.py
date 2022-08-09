@@ -37,7 +37,6 @@ class TestManagerProxyView:
 
         assert resp.status_code == 404
 
-
     @pytest.mark.parametrize(
         "allowlist_mode",
         (
@@ -163,6 +162,7 @@ class TestManagerProxyView:
             )
 
         assert resp.status_code == 404
+
     @pytest.mark.parametrize(
         "has_file",
         (
@@ -195,9 +195,7 @@ class TestManagerProxyView:
         "ibl_request_router.api.manager.MANAGER_AUTH_ENABLED",
         False,
     )
-    def test_params_conversion(
-        self, http_method, scenario, client, requests_mock
-    ):
+    def test_params_conversion(self, http_method, scenario, client, requests_mock):
         if scenario == "ok":
             user, token_header, _ = auth_info()
             requests_mock.request(
