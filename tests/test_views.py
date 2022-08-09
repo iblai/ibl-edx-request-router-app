@@ -37,13 +37,7 @@ class TestManagerProxyView:
 
         assert resp.status_code == 404
 
-    @pytest.mark.parametrize(
-        "has_file",
-        (
-            True,
-            False,
-        ),
-    )
+
     @pytest.mark.parametrize(
         "allowlist_mode",
         (
@@ -85,6 +79,7 @@ class TestManagerProxyView:
         is_response_json,
         status_code,
         allowlist_mode,
+        has_file,
         client,
         requests_mock,
     ):
@@ -168,7 +163,6 @@ class TestManagerProxyView:
             )
 
         assert resp.status_code == 404
-
     @pytest.mark.parametrize(
         "has_file",
         (
@@ -202,7 +196,7 @@ class TestManagerProxyView:
         False,
     )
     def test_params_conversion(
-        self, http_method, scenario, has_file, client, requests_mock
+        self, http_method, scenario, client, requests_mock
     ):
         if scenario == "ok":
             user, token_header, _ = auth_info()
