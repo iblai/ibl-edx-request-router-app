@@ -195,7 +195,7 @@ class TestManagerProxyView:
         False,
     )
     def test_params_conversion(
-        self, http_method, scenario, client, requests_mock, has_file
+        self, http_method, scenario, has_file, client, requests_mock
     ):
         if scenario == "ok":
             user, token_header, _ = auth_info()
