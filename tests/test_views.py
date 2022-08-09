@@ -195,7 +195,7 @@ class TestManagerProxyView:
         "ibl_request_router.api.manager.MANAGER_AUTH_ENABLED",
         False,
     )
-    def test_params_conversion(self, http_method, scenario, client, requests_mock):
+    def test_params_conversion(self, http_method, scenario, has_file, client, requests_mock):
         if scenario == "ok":
             user, token_header, _ = auth_info()
             requests_mock.request(
