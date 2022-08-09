@@ -5,6 +5,7 @@ from uuid import uuid4
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.shortcuts import reverse
+from django.test.client import MULTIPART_CONTENT
 
 from .utils import RandomException, auth_info
 
@@ -216,10 +217,15 @@ class TestManagerProxyView:
                 json={"detail": "success"},
                 additional_matcher=additional_matcher,
             )
-            if has_file:
+            if has_file and http_method.lower() != "get":
                 file = SimpleUploadedFile(
                     "status.txt", b"Deaded :DDD", content_type="text/plain"
                 )
+                data = {"username": user.username, "file": file}
+                encoded_data = client._encode_json(
+                    {} if data is None else data, MULTIPART_CONTENT
+                )
+                encoded_data = client._encode_data(encoded_data, MULTIPART_CONTENT)
                 resp = client.generic(
                     http_method,
                     reverse(
@@ -227,9 +233,11 @@ class TestManagerProxyView:
                         args=(self.endpoint,),
                     )
                     + f"?username={user.username}",
-                    data={"username": user.username, "file": file},
+                    data=encoded_data,
+                    content_type=MULTIPART_CONTENT,
                     HTTP_AUTHORIZATION=token_header,
                 )
+
             else:
                 resp = client.generic(
                     http_method,
