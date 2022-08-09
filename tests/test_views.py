@@ -195,7 +195,9 @@ class TestManagerProxyView:
         "ibl_request_router.api.manager.MANAGER_AUTH_ENABLED",
         False,
     )
-    def test_params_conversion(self, http_method, scenario, has_file, client, requests_mock):
+    def test_params_conversion(
+        self, http_method, scenario, has_file, client, requests_mock
+    ):
         if scenario == "ok":
             user, token_header, _ = auth_info()
             requests_mock.request(
@@ -204,19 +206,12 @@ class TestManagerProxyView:
                 json={"detail": "success"},
             )
 
-            def additional_matcher(request):
-                j = json.loads(request.text)
-                is_username_good = j["username"] == user.username
-                is_user_id_good = j["user_id"] == user.id
-                return is_username_good and is_user_id_good
-
-            requests_mock.request(
-                http_method,
-                f"{self.full_url}",
-                json={"detail": "success"},
-                additional_matcher=additional_matcher,
-            )
             if has_file and http_method.lower() != "get":
+                requests_mock.request(
+                    http_method,
+                    f"{self.full_url}",
+                    json={"detail": "success"},
+                )
                 file = SimpleUploadedFile(
                     "status.txt", b"Deaded :DDD", content_type="text/plain"
                 )
@@ -238,6 +233,19 @@ class TestManagerProxyView:
                 )
 
             else:
+
+                def additional_matcher(request):
+                    j = json.loads(request.text)
+                    is_username_good = j["username"] == user.username
+                    is_user_id_good = j["user_id"] == user.id
+                    return is_username_good and is_user_id_good
+
+                requests_mock.request(
+                    http_method,
+                    f"{self.full_url}",
+                    json={"detail": "success"},
+                    additional_matcher=additional_matcher,
+                )
                 resp = client.generic(
                     http_method,
                     reverse(
