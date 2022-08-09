@@ -78,7 +78,6 @@ class TestManagerProxyView:
         is_response_json,
         status_code,
         allowlist_mode,
-        has_file,
         client,
         requests_mock,
     ):
