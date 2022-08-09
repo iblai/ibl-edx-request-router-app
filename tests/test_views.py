@@ -170,6 +170,13 @@ class TestManagerProxyView:
         assert resp.status_code == 404
 
     @pytest.mark.parametrize(
+        "has_file",
+        (
+            True,
+            False,
+        ),
+    )
+    @pytest.mark.parametrize(
         "scenario",
         (
             "ok",
