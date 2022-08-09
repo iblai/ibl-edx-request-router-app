@@ -56,9 +56,7 @@ class TestAPIManager:
             additional_matcher=request_data_check,
         )
 
-        resp = manager_api_request(
-            http_method, self.endpoint, data={"detail": "hi"}
-        )
+        resp = manager_api_request(http_method, self.endpoint, data={"detail": "hi"})
 
         assert resp.status_code == 200
         assert resp.json()["detail"] == "success"

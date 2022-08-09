@@ -3,6 +3,7 @@ from unittest import mock
 from uuid import uuid4
 
 import pytest
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.shortcuts import reverse
 
 from .utils import RandomException, auth_info
@@ -35,6 +36,13 @@ class TestManagerProxyView:
 
         assert resp.status_code == 404
 
+    @pytest.mark.parametrize(
+        "has_file",
+        (
+            True,
+            False,
+        ),
+    )
     @pytest.mark.parametrize(
         "allowlist_mode",
         (
@@ -185,7 +193,9 @@ class TestManagerProxyView:
         "ibl_request_router.api.manager.MANAGER_AUTH_ENABLED",
         False,
     )
-    def test_params_conversion(self, http_method, scenario, client, requests_mock):
+    def test_params_conversion(
+        self, http_method, scenario, client, requests_mock, has_file
+    ):
         if scenario == "ok":
             user, token_header, _ = auth_info()
             requests_mock.request(
@@ -206,18 +216,32 @@ class TestManagerProxyView:
                 json={"detail": "success"},
                 additional_matcher=additional_matcher,
             )
-
-            resp = client.generic(
-                http_method,
-                reverse(
-                    self.url_name,
-                    args=(self.endpoint,),
+            if has_file:
+                file = SimpleUploadedFile(
+                    "status.txt", b"Deaded :DDD", content_type="text/plain"
                 )
-                + f"?username={user.username}",
-                data=json.dumps({"username": user.username}),
-                content_type="application/json",
-                HTTP_AUTHORIZATION=token_header,
-            )
+                resp = client.generic(
+                    http_method,
+                    reverse(
+                        self.url_name,
+                        args=(self.endpoint,),
+                    )
+                    + f"?username={user.username}",
+                    data={"username": user.username, "file": file},
+                    HTTP_AUTHORIZATION=token_header,
+                )
+            else:
+                resp = client.generic(
+                    http_method,
+                    reverse(
+                        self.url_name,
+                        args=(self.endpoint,),
+                    )
+                    + f"?username={user.username}",
+                    data=json.dumps({"username": user.username}),
+                    content_type="application/json",
+                    HTTP_AUTHORIZATION=token_header,
+                )
 
             assert resp.json()["detail"] == "success"
         if scenario == "user_non_existent":
