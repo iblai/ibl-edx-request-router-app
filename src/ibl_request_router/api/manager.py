@@ -1,15 +1,13 @@
-import json
 import logging
 import requests
 
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import Http404
 
 try:
     from ibl_api_auth.utils.oauth import get_app_access_token
 except ImportError:
-    pass
+    get_app_access_token = lambda x: "BAD_TOKEN"
 
 from ibl_request_router.config import (
     MANAGER_BASE_URL,
