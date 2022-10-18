@@ -7,7 +7,7 @@ from django.http import Http404
 try:
     from ibl_api_auth.utils.oauth import get_app_access_token
 except ImportError:
-    get_app_access_token = lambda x: "BAD_TOKEN"
+    get_app_access_token = lambda x: "ERROR_NO_TOKEN_GETTER"
 
 from ibl_request_router.config import (
     MANAGER_BASE_URL,
