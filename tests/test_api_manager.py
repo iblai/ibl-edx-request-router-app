@@ -1,5 +1,7 @@
 import json
 from unittest import mock
+from uuid import uuid4
+
 import pytest
 from django.http import Http404
 
@@ -11,7 +13,7 @@ MANAGER_MAX_TRIES_PKG_PATH = "ibl_request_router.api.manager.MANAGER_MAX_TRIES"
 MANAGER_BASE_URL = "http://sleipnir.asgard.local"
 MANAGER_BASE_API_URL = MANAGER_BASE_URL + "/api"
 
-OAUTH_TOKEN = "ERROR_NO_TOKEN_GETTER"
+OAUTH_TOKEN = uuid4().hex
 
 
 @pytest.mark.django_db
