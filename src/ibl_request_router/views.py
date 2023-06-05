@@ -55,14 +55,13 @@ def manager_proxy_view(request, endpoint_path=None):
                 response.json(), status=response.status_code
             )
         except ValueError:
+            message = {}
             if response.ok:
                 # Only log when the response is expected to be valid
-                log.error(
-                    "Non-JSON response %s: %s %s",
-                    endpoint_path, response.status_code, response.text, exc_info=True
-                )
-        
-        return Response({}, status=response.status_code)
+                message['code'] = response.status_code
+                message['content'] = response.content
+
+        return Response(message, status=response.status_code)
         #return HttpResponse(response.text, status=response.status_code)
     except Exception:
         log.exception("Bad proxy request: %s", endpoint_path)
