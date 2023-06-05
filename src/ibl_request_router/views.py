@@ -7,7 +7,8 @@ from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.decorators import api_view, authentication_classes, parser_classes
+from rest_framework.parsers import FileUploadParser
 try:
     from openedx.core.lib.api.authentication import BearerAuthentication as OAuth2Authentication
 except ImportError:
@@ -30,6 +31,7 @@ log = logging.getLogger(__name__)
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @csrf_exempt
+@parser_classes(FileUploadParser,)
 @authentication_classes((SessionAuthentication, OAuth2Authentication, JwtAuthentication))
 def manager_proxy_view(request, endpoint_path=None):
     """
