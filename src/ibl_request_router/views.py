@@ -31,7 +31,6 @@ log = logging.getLogger(__name__)
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @csrf_exempt
-@parser_classes([FileUploadParser])
 @authentication_classes((SessionAuthentication, OAuth2Authentication, JwtAuthentication))
 def manager_proxy_view(request, endpoint_path=None):
     """
