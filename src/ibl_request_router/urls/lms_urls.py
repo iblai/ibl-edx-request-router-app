@@ -4,11 +4,21 @@ from django.conf.urls import url, include
 from ibl_request_router import views
 from ibl_request_router.config import (
     MANAGER_PROXY_ENABLED,
+    MANAGER_TOKEN_PROXY_ENABLED,
     URL_PATTERNS_BEFORE_ROUTER
 )
 
 
 urlpatterns = []
+
+if MANAGER_TOKEN_PROXY_ENABLED:
+    urlpatterns += [
+        url(
+            r'^api/ibl/manager/token/proxy/?$',
+            views.manager_token_proxy_view,
+            name="manager_token_proxy_view"
+        )
+    ]
 
 if MANAGER_PROXY_ENABLED:
     for pattern in URL_PATTERNS_BEFORE_ROUTER:

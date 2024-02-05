@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.0
+* Add manager token proxy view
+
 ## 0.2.4
 * Add verify toggle to manager proxy requests
 

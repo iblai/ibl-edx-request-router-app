@@ -21,7 +21,10 @@ except ImportError:
 
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 
-from ibl_request_router.api.manager import manager_proxy_request
+from ibl_request_router.api.manager import (
+    manager_api_request, manager_proxy_request
+)
+from ibl_request_router.config import MANAGER_TOKEN_ENDPOINT_PATH
 from ibl_request_router.utils.access import check_request_permissions
 
 
@@ -65,3 +68,47 @@ def manager_proxy_view(request, endpoint_path=None):
     except Exception:
         log.exception("Bad proxy request: %s", endpoint_path)
         raise Http404
+
+
+# Token view
+
+@api_view(['POST'])
+@csrf_exempt
+@authentication_classes((SessionAuthentication, OAuth2Authentication, JwtAuthentication))
+def manager_token_proxy_view(request):
+    """
+    Manager token proxy view
+    
+    User must be authenticated.
+    """
+    # Check request user
+    if not (request.user and request.user.is_authenticated and request.user.is_active):
+        log.warning("Invalid user cannot request token.")
+        raise Http404
+    
+    try:
+        response = manager_api_request(
+            'POST', MANAGER_TOKEN_ENDPOINT_PATH,
+            data={
+                "user_id": request.user.id
+            }
+        )
+        
+        try:
+            log.info("Token proxy response %s", response.status_code)
+            return Response(
+                response.json(), status=response.status_code
+            )
+        except ValueError:
+            if response.ok:
+                # Only log when the response is expected to be valid
+                log.exception(
+                    "Non-JSON token proxy response: %s %s",
+                    response.status_code, response.text
+                )
+        
+        return Response({}, status=response.status_code)
+    except Exception:
+        log.exception("Token proxy request error")
+        raise Http404
+

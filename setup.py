@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='ibl-request-router',
-    version='0.2.5',
+    version='0.3.0',
     packages=find_packages('src'),
     install_requires=['requests-mock'],
     package_dir={'': 'src'},

@@ -15,6 +15,8 @@ MANAGER_PROXY_TIMEOUT = getattr(settings, "MANAGER_PROXY_TIMEOUT", MANAGER_REQUE
 
 # Allow proxy requests to the manager through edX
 MANAGER_PROXY_ENABLED = getattr(settings, "MANAGER_PROXY_ENABLED", True)
+MANAGER_TOKEN_PROXY_ENABLED = getattr(settings, "MANAGER_TOKEN_PROXY_ENABLED", True)
+MANAGER_TOKEN_ENDPOINT_PATH = "core/token/proxy/"
 
 MANAGER_AUTH_ENABLED = getattr(settings, 'MANAGER_AUTH_ENABLED', True)
 MANAGER_AUTH_APP_ID = getattr(settings, 'MANAGER_AUTH_APP_ID', 'manager')
