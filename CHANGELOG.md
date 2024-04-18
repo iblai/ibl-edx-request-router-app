@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.0
+* Makes `platform_key` a required JSON POST key to token proxy endpoint
+
 ## 0.3.0
 * Add manager token proxy view
 
