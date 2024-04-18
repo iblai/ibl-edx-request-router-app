@@ -1,7 +1,7 @@
 import logging
 
 import six
-from django.http import Http404, HttpResponseBadRequest
+from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import api_view, authentication_classes
@@ -90,7 +90,7 @@ def manager_token_proxy_view(request):
     platform_key = request.data.get("platform_key")
     if not platform_key:
         log.warning("Missing platform_key - cannot request token without platform_key")
-        return HttpResponseBadRequest("Missing platform_key")
+        return Response({"error": "Missing platform_key"}, status=400)
 
     try:
         response = manager_api_request(
