@@ -17,7 +17,7 @@ from rest_framework.response import Response
 
 from ibl_request_router.api.manager import manager_api_request, manager_proxy_request
 from ibl_request_router.config import (
-    MANAGER_API_TOKEN_ENDPOINT_PATH,
+    MANAGER_CONSOLIDATED_TOKEN_ENDPOINT_PATH,
     MANAGER_TOKEN_ENDPOINT_PATH,
 )
 from ibl_request_router.utils.access import check_request_permissions
@@ -113,17 +113,15 @@ def manager_token_proxy_view(request):
         raise Http404
 
 
-# Token view
-
-
 @api_view(["POST"])
 @csrf_exempt
 @authentication_classes(
     (SessionAuthentication, OAuth2Authentication, JwtAuthentication)
 )
-def manager_api_token_proxy_view(request):
+def manager_consolidated_token_proxy_view(request):
     """
-    Same as
+    Same as manager_token_proxy_view above but requires platform and posts to the
+    new consolidated endpoint
 
     User must be authenticated.
     """
@@ -142,7 +140,7 @@ def manager_api_token_proxy_view(request):
     try:
         response = manager_api_request(
             "POST",
-            MANAGER_API_TOKEN_ENDPOINT_PATH,
+            MANAGER_CONSOLIDATED_TOKEN_ENDPOINT_PATH,
             data={"user_id": request.user.id, "platform_key": platform_key},
         )
 

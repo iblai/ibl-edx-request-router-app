@@ -18,9 +18,9 @@ if MANAGER_TOKEN_PROXY_ENABLED:
             name="manager_token_proxy_view",
         ),
         url(
-            r"^api/ibl/manager/api-token/proxy/?$",
-            views.manager_api_token_proxy_view,
-            name="manager_api_token_proxy_view",
+            r"^api/ibl/manager/consolidated-token/proxy/?$",
+            views.manager_consolidated_token_proxy_view,
+            name="manager_consolidated_token_proxy_view",
         ),
     ]
 
