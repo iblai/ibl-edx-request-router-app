@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.4.0
-* Makes `platform_key` a required JSON POST key to token proxy endpoint
+* Adds `/api/ibl/manager/consolidated-token/proxy/` endpoint that fetches a json payload from DM w/ dm/axd tokens and user info
 
 ## 0.3.0
 * Add manager token proxy view
