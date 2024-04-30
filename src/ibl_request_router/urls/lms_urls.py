@@ -1,46 +1,47 @@
 # URLs
-from django.conf.urls import url, include
+from django.conf.urls import include, url
 
 from ibl_request_router import views
 from ibl_request_router.config import (
     MANAGER_PROXY_ENABLED,
     MANAGER_TOKEN_PROXY_ENABLED,
-    URL_PATTERNS_BEFORE_ROUTER
+    URL_PATTERNS_BEFORE_ROUTER,
 )
-
 
 urlpatterns = []
 
 if MANAGER_TOKEN_PROXY_ENABLED:
     urlpatterns += [
         url(
-            r'^api/ibl/manager/token/proxy/?$',
+            r"^api/ibl/manager/token/proxy/?$",
             views.manager_token_proxy_view,
-            name="manager_token_proxy_view"
-        )
+            name="manager_token_proxy_view",
+        ),
+        url(
+            r"^api/ibl/manager/consolidated-token/proxy/?$",
+            views.manager_consolidated_token_proxy_view,
+            name="manager_consolidated_token_proxy_view",
+        ),
     ]
 
 if MANAGER_PROXY_ENABLED:
     for pattern in URL_PATTERNS_BEFORE_ROUTER:
-        if pattern.get('namespace'):
+        if pattern.get("namespace"):
             urlpatterns += [
                 url(
-                    pattern['regex'],
-                    include(
-                        pattern['url_path'],
-                        namespace=pattern.get('namespace')
-                    )
+                    pattern["regex"],
+                    include(pattern["url_path"], namespace=pattern.get("namespace")),
                 ),
             ]
         else:
             urlpatterns += [
-                url(pattern['regex'], include(pattern['url_path'])),
+                url(pattern["regex"], include(pattern["url_path"])),
             ]
 
     urlpatterns += [
         url(
-            r'^api/ibl/(?P<endpoint_path>[\w+-/@.~+:]+)$',
+            r"^api/ibl/(?P<endpoint_path>[\w+-/@.~+:]+)$",
             views.manager_proxy_view,
-            name="manager_proxy_view"
+            name="manager_proxy_view",
         )
     ]
