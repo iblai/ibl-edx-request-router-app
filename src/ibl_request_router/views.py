@@ -132,9 +132,6 @@ def manager_consolidated_token_proxy_view(request):
 
     platform_key = request.data.get("platform_key")
     if not platform_key:
-        log.warning(
-            "Missing platform_key - cannot request api-token without platform_key"
-        )
         return Response({"error": "Missing platform_key"}, status=400)
 
     try:
@@ -145,18 +142,18 @@ def manager_consolidated_token_proxy_view(request):
         )
 
         try:
-            log.info("Api Token proxy response %s", response.status_code)
+            log.info("Consolidated Token proxy response %s", response.status_code)
             return Response(response.json(), status=response.status_code)
         except ValueError:
             if response.ok:
                 # Only log when the response is expected to be valid
                 log.exception(
-                    "Non-JSON api-token proxy response: %s %s",
+                    "Non-JSON consolidated token proxy response: %s %s",
                     response.status_code,
                     response.text,
                 )
 
         return Response({}, status=response.status_code)
-    except Exception:
-        log.exception("Api Token proxy request error")
+    except Exception as e:
+        log.exception("Consolidated Token proxy request error: %s", e)
         raise Http404
