@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.0
+* Restructure views, add heartbeat endpoint
+
 ## 0.4.0
 * Adds `/api/ibl/manager/consolidated-token/proxy/` endpoint that fetches a json payload from DM w/ dm/axd tokens and user info
 

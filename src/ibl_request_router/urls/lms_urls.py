@@ -1,25 +1,33 @@
 # URLs
 from django.conf.urls import include, url
 
-from ibl_request_router import views
+from ibl_request_router.views import (
+    heartbeat, proxy, token
+)
 from ibl_request_router.config import (
     MANAGER_PROXY_ENABLED,
     MANAGER_TOKEN_PROXY_ENABLED,
     URL_PATTERNS_BEFORE_ROUTER,
 )
 
-urlpatterns = []
+urlpatterns = [
+    url(
+        r"^api/ibl/heartbeat/celery/?$",
+        heartbeat.CeleryHeartbeatView.as_view(),
+        name="heartbeat_celery_view"
+    )
+]
 
 if MANAGER_TOKEN_PROXY_ENABLED:
     urlpatterns += [
         url(
             r"^api/ibl/manager/token/proxy/?$",
-            views.manager_token_proxy_view,
+            token.manager_token_proxy_view,
             name="manager_token_proxy_view",
         ),
         url(
             r"^api/ibl/manager/consolidated-token/proxy/?$",
-            views.manager_consolidated_token_proxy_view,
+            token.manager_consolidated_token_proxy_view,
             name="manager_consolidated_token_proxy_view",
         ),
     ]
@@ -41,7 +49,7 @@ if MANAGER_PROXY_ENABLED:
     urlpatterns += [
         url(
             r"^api/ibl/(?P<endpoint_path>[\w+-/@.~+:]+)$",
-            views.manager_proxy_view,
+            proxy.manager_proxy_view,
             name="manager_proxy_view",
         )
     ]
