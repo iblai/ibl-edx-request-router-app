@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.1
+* Add additional manager request logging
+
 ## 0.5.0
 * Restructure views, add heartbeat endpoint
 
