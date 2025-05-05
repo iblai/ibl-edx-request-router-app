@@ -75,9 +75,9 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
             if response.ok:
                 break
             else:
-                log.exception("Manager error response: %s %s %s %s", method, url, params, response)
+                log.exception("Manager error response #%d: %s %s %s %s", req, method, url, params, response)
         except Exception:
-            log.exception("Manager response exception: %s %s %s", method, url, params)
+            log.exception("Manager response exception #%d: %s %s %s", req, method, url, params)
             continue
     
     return response
