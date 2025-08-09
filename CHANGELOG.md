@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.3
+* Add init for settings
+
 ## 0.5.2
 * Add numeric manager request logging
 
