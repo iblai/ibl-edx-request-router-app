@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.4
+* Improve manager API error logging
+  * Change log.exception() to log.error() for HTTP error responses (no exception raised)
+  * Add explicit status code and response body to error logs
+  * Add request data to error and exception logs for better debugging
+
 ## 0.5.3
 * Add init for settings
 

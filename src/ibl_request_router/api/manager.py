@@ -1,4 +1,3 @@
-import json
 import logging
 import requests
 
@@ -67,7 +66,6 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
     response = None
     for req in range(max_tries):
         try:
-            # TODO: Make logs optional
             log.info("Manager request #%d: %s %s %s", req, method, url, params)
             response = requests.request(
                 method, url, **request_kwargs
@@ -75,9 +73,15 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
             if response.ok:
                 break
             else:
-                log.exception("Manager error response #%d: %s %s %s %s", req, method, url, params, response)
+                log.error(
+                    "Manager error response #%d: %s %s %s - Status: %d - Request data: %s - Response: %s",
+                    req, method, url, params, response.status_code, data, response.text
+                )
         except Exception:
-            log.exception("Manager response exception #%d: %s %s %s", req, method, url, params)
+            log.exception(
+                "Manager response exception #%d: %s %s %s - Request data: %s",
+                req, method, url, params, data
+            )
             continue
     
     return response
