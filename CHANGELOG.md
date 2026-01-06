@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.1
+* Wrap URL import into a try statement for backward compatibility
+
 ## 0.5.0
 * Restructure views, add heartbeat endpoint
 
