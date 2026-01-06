@@ -1,4 +1,3 @@
-import json
 import logging
 import requests
 
@@ -48,7 +47,11 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
     # Auth headers
     headers = {}
     if MANAGER_AUTH_ENABLED:
-        headers['Authorization'] = 'Bearer {}'.format(get_app_access_token(MANAGER_AUTH_APP_ID))
+        auth_token = get_app_access_token(MANAGER_AUTH_APP_ID)
+        if not auth_token:
+            log.warning("Manager auth token empty: %s", auth_token)
+        
+        headers['Authorization'] = 'Bearer {}'.format(auth_token)
     
     # Request config
     request_kwargs = {
@@ -63,15 +66,22 @@ def manager_api_request(method, endpoint_path, params=None, data=None,
     response = None
     for req in range(max_tries):
         try:
-            # TODO: Make logs optional
             log.info("Manager request #%d: %s %s %s", req, method, url, params)
             response = requests.request(
                 method, url, **request_kwargs
             )
             if response.ok:
                 break
+            else:
+                log.error(
+                    "Manager error response #%d: %s %s %s - Status: %d - Request data: %s - Response: %s",
+                    req, method, url, params, response.status_code, data, response.text
+                )
         except Exception:
-            log.exception("Manager response exception: %s %s %s", method, url, params)
+            log.exception(
+                "Manager response exception #%d: %s %s %s - Request data: %s",
+                req, method, url, params, data
+            )
             continue
     
     return response

@@ -1,7 +1,22 @@
 # Changelog
 
-## 0.5.1
+## 0.5.5
 * Wrap URL import into a try statement for backward compatibility
+
+## 0.5.4
+* Improve manager API error logging
+  * Change log.exception() to log.error() for HTTP error responses (no exception raised)
+  * Add explicit status code and response body to error logs
+  * Add request data to error and exception logs for better debugging
+
+## 0.5.3
+* Add init for settings
+
+## 0.5.2
+* Add numeric manager request logging
+
+## 0.5.1
+* Add additional manager request logging
 
 ## 0.5.0
 * Restructure views, add heartbeat endpoint
